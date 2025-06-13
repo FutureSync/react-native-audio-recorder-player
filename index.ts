@@ -1,4 +1,4 @@
-import type {EmitterSubscription} from 'react-native';
+import type { EmitterSubscription } from 'react-native';
 import {
   DeviceEventEmitter,
   NativeEventEmitter,
@@ -6,7 +6,7 @@ import {
   Platform,
 } from 'react-native';
 
-const {RNAudioRecorderPlayer} = NativeModules;
+const { RNAudioRecorderPlayer } = NativeModules;
 
 export enum AudioSourceAndroidType {
   DEFAULT = 0,
@@ -161,9 +161,9 @@ class AudioRecorderPlayer {
   private _isPlaying: boolean;
   private _hasPaused: boolean;
   private _hasPausedRecord: boolean;
-  private _recorderSubscription: EmitterSubscription;
-  private _playerSubscription: EmitterSubscription;
-  private _playerCallback: (event: PlayBackType) => void;
+  private _recorderSubscription: EmitterSubscription | null = null;
+  private _playerSubscription: EmitterSubscription | null = null;
+  private _playerCallback: ((event: PlayBackType) => void) | null = null;
 
   mmss = (secs: number): string => {
     let minutes = Math.floor(secs / 60);
@@ -370,6 +370,8 @@ class AudioRecorderPlayer {
 
       return RNAudioRecorderPlayer.startPlayer(uri, httpHeaders);
     }
+
+    return 'Already playing';
   };
 
   /**
@@ -401,6 +403,8 @@ class AudioRecorderPlayer {
 
       return RNAudioRecorderPlayer.pausePlayer();
     }
+
+    return 'Already playing';
   };
 
   /**
